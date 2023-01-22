@@ -33,9 +33,16 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
+        id: build_push
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      
+      - name: Update Kubernetes deployment version
+        run: |-
+          sed -i 's#image: ghcr.io.*#image: ghcr.io/luka-j/argo-test@${{ steps.build_push.outputs.digest }}#' k8s/test-deployment.yaml
+          git commit -am "Update deployment version"
+          git push
