@@ -7,7 +7,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  AUTHORIZED_ORIGIN: "https://${{ secrets.GITHUB_TOKEN }}@github.com/luka-j/${{ github.repository }}.git"
 
 jobs:
   build-and-push-image:
@@ -47,6 +46,10 @@ jobs:
           sed -i 's#image: ghcr.io.*#image: ghcr.io/luka-j/argo-test@${{ steps.build_push.outputs.digest }}#' k8s/test-deployment.yaml
           git config user.name "GitHub CI Runner"
           git config user.email "gh-ci-runner@rs2.luka-j.rocks"
-          git commit -am "Update deployment version"
-          git remote add auth-origin "${{ env.AUTHORIZED_ORIGIN }}"
-          git push auth-origin main
+          git commit -am "[CI] Deploy"
+          
+      - name: Push updated Kubernetes manifests
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
