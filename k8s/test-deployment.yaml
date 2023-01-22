@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: test-aspnet
-        image: ghcr.io/luka-j/argo-test:main
+        image: ghcr.io/luka-j/argo-test@
         imagePullPolicy: Always
         ports:
         - containerPort: 80
