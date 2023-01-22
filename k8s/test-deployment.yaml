@@ -7,7 +7,6 @@ metadata:
     app: test-aspnet
 spec:
   replicas: 2
-  imagePullPolicy: Always
   selector:
     matchLabels:
       app: test-aspnet
@@ -19,5 +18,6 @@ spec:
       containers:
       - name: test-aspnet
         image: ghcr.io/luka-j/argo-test:main
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
