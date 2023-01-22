@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-aspnet-deployment
+  namespace: test-aspnet
+  labels:
+    app: test-aspnet
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: test-aspnet
+  template:
+    metadata:
+      labels:
+        app: test-aspnet
+    spec:
+      containers:
+      - name: test-aspnet
+        image: ghcr.io/luka-j/argo-test:main
+        ports:
+        - containerPort: 80
