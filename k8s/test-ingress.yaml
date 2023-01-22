@@ -12,7 +12,7 @@ spec:
       paths:
       - backend:
           service:
-            name: test-aspnet-svc
+            name: test-aspnet-service
             port:
               name: http
         path: /
