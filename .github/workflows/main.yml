@@ -71,9 +71,9 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
     - name: Sync ArgoCD app
-        uses: omegion/argocd-actions@v1
-        with:
-          address: "argo-rs2.luka-j.rocks"
-          token: ${{ secrets.ARGOCD_TOKEN }}
-          action: sync
-          appName: ${{ env.ARGOCD_APP_NAME }}
+      uses: omegion/argocd-actions@v1
+      with:
+        address: "argo-rs2.luka-j.rocks"
+        token: ${{ secrets.ARGOCD_TOKEN }}
+        action: sync
+        appName: ${{ env.ARGOCD_APP_NAME }}
