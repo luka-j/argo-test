@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0.2-bullseye-slim-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0.102-bullseye-slim-amd64 AS build
 WORKDIR /src
 COPY ["test-dotnet/test-dotnet.csproj", "test-dotnet/"]
 RUN dotnet restore "test-dotnet/test-dotnet.csproj"
