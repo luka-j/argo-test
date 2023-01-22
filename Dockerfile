@@ -5,14 +5,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["test-dotnet.csproj", "test-dotnet/"]
+COPY ["test-dotnet/test-dotnet.csproj", "test-dotnet/"]
 RUN dotnet restore "test-dotnet/test-dotnet.csproj"
-COPY . test-dotnet
+COPY . .
 WORKDIR "/src/test-dotnet"
-RUN dotnet build "test-dotnet.csproj" -a arm64 -c Release -o /app/build
+RUN dotnet build "test-dotnet.csproj" -r linux-arm64 -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "test-dotnet.csproj" -a arm64 -c Release -o /app/publish
+RUN dotnet publish "test-dotnet.csproj" -r linux-arm64 -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
