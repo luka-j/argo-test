@@ -17,7 +17,7 @@ jobs:
       packages: write
 
     outputs:
-      image_digest: ${{ steps.build_push.outputs.digest }}
+      image_digest: ${{ steps.build-push.outputs.digest }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -36,9 +36,11 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,format=long
 
       - name: Build and push Docker image
-        id: build_push
+        id: build-push
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
@@ -59,21 +61,14 @@ jobs:
         persist-credentials: false
     - name: Update version in deployment manifest
       run: |
-          sed -i 's#image: ghcr.io.*#image: ghcr.io/luka-j/argo-test@${{ needs.build-and-push-image.outputs.image_digest }}#' k8s/test-deployment.yaml
+          sed -i 's#image: ghcr.io.*#image: ghcr.io/luka-j/argo-test:${{ github.sha }}#' k8s/test-deployment.yaml
     - name: Commit files
       run: |
           git config user.name "GitHub CI Runner"
           git config user.email "gh-ci-runner@rs2.luka-j.rocks"
-          git commit -am "[CI] Deploy"
+          git commit -am "[CI] Deploy ${{ needs.build-and-push-image.outputs.image_digest }}"
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}
-    - name: Sync ArgoCD app
-      uses: omegion/argocd-actions@v1
-      with:
-        address: "argo-rs2.luka-j.rocks"
-        token: ${{ secrets.ARGOCD_TOKEN }}
-        action: sync
-        appName: ${{ env.ARGOCD_APP_NAME }}
