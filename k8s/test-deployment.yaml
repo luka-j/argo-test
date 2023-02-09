@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: test-aspnet
-        image: ghcr.io/luka-j/argo-test:sha-98fb9b7c49b8dd57add4aa8a54c5a39ea489d52a
+        image: ghcr.io/luka-j/argo-test:sha-151687cbc9b6a3abf7aca610c9a5e97654d56247
         imagePullPolicy: Always
         ports:
         - containerPort: 80
